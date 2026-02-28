@@ -1,0 +1,300 @@
+/* =============================================
+   Fashion AI Chat Styles - ChatGPT Style
+============================================= */
+.chatbot-glass {
+    max-width: 900px !important;
+    padding: 30px !important;
+}
+
+@media (max-width: 768px) {
+    .chatbot-glass {
+        padding: 15px !important;
+        max-width: 95% !important;
+    }
+}
+
+/* =============================================
+   CHAT ENTRY ANIMATION
+============================================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes chatMsgAppear {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chat-interface {
+    animation: fadeIn 0.8s ease-out forwards;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chat-msg-appear {
+    animation: chatMsgAppear 0.35s ease-out forwards;
+}
+
+/* =============================================
+   IMAGE GRID (like ChatGPT)
+============================================= */
+.chat-image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin: 14px 0;
+    border-radius: 14px;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.chat-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: zoom-in;
+    transition: transform 0.3s ease, filter 0.3s;
+    display: block;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.chat-img:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+    z-index: 2;
+    position: relative;
+}
+
+@media (max-width: 600px) {
+    .chat-image-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =============================================
+   MARKDOWN RICH TEXT STYLES
+============================================= */
+.chat-h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 20px 0 10px;
+    line-height: 1.3;
+}
+
+.chat-h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #c084fc;
+    margin: 18px 0 8px;
+}
+
+.chat-h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ddd;
+    margin: 14px 0 6px;
+}
+
+.chat-p {
+    color: #e2e2e2;
+    font-size: 0.97rem;
+    line-height: 1.75;
+    margin: 8px 0;
+}
+
+.chat-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 10px 4px;
+}
+
+.chat-list li {
+    color: #ddd;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    padding: 3px 0 3px 22px;
+    position: relative;
+}
+
+.chat-list li::before {
+    content: "•";
+    position: absolute;
+    left: 6px;
+    color: #9d4edd;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.chat-hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 18px 0;
+}
+
+/* =============================================
+   SHOP LINK BUTTON (on-demand only)
+============================================= */
+.shop-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(157, 78, 221, 0.12);
+    border: 1px solid rgba(157, 78, 221, 0.35);
+    color: #c084fc;
+    padding: 9px 18px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 8px 4px 8px 0;
+    transition: all 0.2s;
+}
+
+.shop-link-btn:hover {
+    background: rgba(157, 78, 221, 0.28);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(157, 78, 221, 0.3);
+}
+
+/* =============================================
+   TYPING INDICATOR — animated dots
+============================================= */
+.typing-indicator {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 4px !important;
+    background: transparent !important;
+    border: none !important;
+    max-width: 100% !important;
+    font-size: 0.9rem;
+    color: #aaa !important;
+}
+
+.typing-dots {
+    display: inline-flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.typing-dots span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #9d4edd;
+    border-radius: 50%;
+    animation: dotBounce 1.2s infinite;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dotBounce {
+
+    0%,
+    60%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+
+    30% {
+        transform: translateY(-7px);
+        opacity: 1;
+    }
+}
+
+/* =============================================
+   VOICE PULSE
+============================================= */
+@keyframes voicePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(157, 78, 221, 0.5);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(157, 78, 221, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(157, 78, 221, 0);
+    }
+}
+
+.pulse {
+    animation: voicePulse 1s infinite !important;
+    background: rgba(157, 78, 221, 0.2) !important;
+    color: #9d4edd !important;
+}
+
+/* =============================================
+   CUSTOM SCROLLBAR
+============================================= */
+#chat-messages::-webkit-scrollbar {
+    width: 5px;
+}
+
+#chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(157, 78, 221, 0.3);
+    border-radius: 10px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #9d4edd;
+}
+
+/* =============================================
+   INPUT AREA POLISH
+============================================= */
+.chat-input-area:focus-within {
+    border-color: rgba(157, 78, 221, 0.6) !important;
+    background: rgba(0, 0, 0, 0.65) !important;
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.1);
+}
+
+.input-actions label:hover,
+.input-right-actions button:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-2px);
+}
+
+.send-btn {
+    transition: all 0.2s !important;
+}
+
+.send-btn:hover {
+    background: #9d4edd !important;
+    color: white !important;
+    transform: scale(1.1);
+}
+
+.send-btn:active {
+    transform: scale(0.9);
+}

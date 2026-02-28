@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazioni | Fashion AI Admin</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f0c29;
+            --primary: #9d4edd;
+            --primary-dark: #7b2cbf;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(123, 44, 191, 0.25);
+            --text: #fff;
+            --subtext: #94a3b8;
+            --gradient: linear-gradient(135deg, #7b2cbf, #333399);
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── LOCK SCREEN ── */
+        #lock-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lock-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 48px 44px;
+            width: 380px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .lock-icon {
+            font-size: 3rem;
+            margin-bottom: 18px;
+        }
+
+        .lock-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .lock-card p {
+            color: var(--subtext);
+            font-size: 0.9rem;
+            margin-bottom: 28px;
+        }
+
+        .lock-card input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 14px 18px;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            text-align: center;
+            letter-spacing: 4px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .lock-card input:focus {
+            border-color: var(--primary);
+        }
+
+        .lock-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lock-btn:hover {
+            opacity: 0.88;
+            transform: translateY(-2px);
+        }
+
+        .lock-error {
+            color: #f87171;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* ── LAYOUT ── */
+        #admin-panel {
+            display: none;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 240px;
+            background: rgba(15, 12, 41, 0.9);
+            border-right: 1px solid var(--glass-border);
+            padding: 28px 0;
+            position: fixed;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: 0 22px 24px;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 16px;
+        }
+
+        .brand {
+            font-family: 'Comfortaa', cursive;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .brand span {
+            color: var(--primary);
+        }
+
+        .sidebar-label {
+            padding: 16px 22px 6px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 11px 22px;
+            color: var(--subtext);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+
+        .nav-item.active,
+        .nav-item:hover {
+            color: white;
+            background: rgba(157, 78, 221, 0.08);
+            border-left-color: var(--primary);
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 16px 0;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* ── MAIN ── */
+        .main {
+            margin-left: 240px;
+            flex: 1;
+            padding: 36px 44px;
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .topbar h1 {
+            font-size: 1.9rem;
+            font-weight: 800;
+        }
+
+        .topbar h1 span {
+            color: var(--primary);
+        }
+
+        .topbar p {
+            color: var(--subtext);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        /* ── STATS ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 22px 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--subtext);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+        }
+
+        /* ── TABLE CARD ── */
+        .table-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 22px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--glass-border);
+            flex-wrap: wrap;
+        }
+
+        .toolbar input,
+        .toolbar select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 9px 14px;
+            color: white;
+            font-family: inherit;
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .toolbar input {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .toolbar input:focus,
+        .toolbar select:focus {
+            border-color: var(--primary);
+        }
+
+        .toolbar select option {
+            background: #1e1535;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        thead tr {
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        th {
+            padding: 13px 18px;
+            text-align: left;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--subtext);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: rgba(157, 78, 221, 0.05);
+        }
+
+        tbody tr.blocked-row {
+            opacity: 0.5;
+        }
+
+        td {
+            padding: 14px 18px;
+            vertical-align: middle;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .avatar.blocked {
+            background: rgba(148, 163, 184, 0.2);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .badge-verified {
+            background: rgba(34, 197, 94, 0.12);
+            color: #4ade80;
+        }
+
+        .badge-pending {
+            background: rgba(245, 158, 11, 0.12);
+            color: #fbbf24;
+        }
+
+        .badge-blocked {
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+        }
+
+        .action-wrap {
+            display: flex;
+            gap: 7px;
+        }
+
+        .btn {
+            padding: 5px 13px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .btn-block {
+            background: rgba(245, 158, 11, 0.12);
+            color: #fbbf24;
+        }
+
+        .btn-block:hover {
+            background: rgba(245, 158, 11, 0.22);
+        }
+
+        .btn-unblock {
+            background: rgba(34, 197, 94, 0.12);
+            color: #4ade80;
+        }
+
+        .btn-unblock:hover {
+            background: rgba(34, 197, 94, 0.22);
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.22);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 70px 20px;
+            color: var(--subtext);
+        }
+
+        .empty-state .ei {
+            font-size: 3rem;
+            margin-bottom: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── LOCK SCREEN ── -->
+    <div id="lock-screen">
+        <div class="lock-card">
+            <div class="lock-icon">🔐</div>
+            <h2>Area <span style="color:#9d4edd;">Riservata</span></h2>
+            <p>Inserisci la password admin per accedere alle registrazioni</p>
+            <input type="password" id="lock-pass" placeholder="••••••••"
+                onkeypress="if(event.key==='Enter') checkLock()">
+            <button class="lock-btn" onclick="checkLock()">Accedi</button>
+            <div class="lock-error" id="lock-err">⚠️ Password errata. Riprova.</div>
+        </div>
+    </div>
+
+    <!-- ── ADMIN PANEL ── -->
+    <div id="admin-panel">
+        <div class="layout">
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-logo">
+                    <div class="brand">FASHION <span>AI</span></div>
+                    <small style="color:var(--subtext); font-size:0.75rem;">Pannello Admin</small>
+                </div>
+
+                <div class="sidebar-label">Gestione</div>
+                <div class="nav-item active" id="nav-users">👥 Utenti Registrati</div>
+
+                <div class="sidebar-bottom">
+                    <a href="admin.html" class="nav-item">📋 Community Richieste</a>
+                    <a href="index.html" class="nav-item">🏠 Torna al Sito</a>
+                    <div class="nav-item" onclick="logout()" style="color:#f87171;">🚪 Esci</div>
+                </div>
+            </aside>
+
+            <!-- Main -->
+            <main class="main">
+                <!-- Topbar -->
+                <div class="topbar">
+                    <div>
+                        <h1>Utenti <span>Registrati</span></h1>
+                        <p>Gestisci tutti gli account del sito — blocca o elimina</p>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-label">Totale Utenti</div>
+                        <div class="stat-value" id="s-total" style="color:#c084fc;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Verificati</div>
+                        <div class="stat-value" id="s-verified" style="color:#4ade80;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Bloccati</div>
+                        <div class="stat-value" id="s-blocked" style="color:#f87171;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">In Attesa</div>
+                        <div class="stat-value" id="s-pending" style="color:#fbbf24;">0</div>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="table-card">
+                    <div class="toolbar">
+                        <input type="text" id="search" placeholder="🔍 Cerca per nome o email..."
+                            oninput="renderTable()">
+                        <select id="filter-status" onchange="renderTable()">
+                            <option value="">Tutti gli stati</option>
+                            <option value="verified">Verificati</option>
+                            <option value="pending">In attesa</option>
+                            <option value="blocked">Bloccati</option>
+                        </select>
+                    </div>
+
+                    <div style="overflow-x:auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Utente</th>
+                                    <th>Email</th>
+                                    <th>Registrazione</th>
+                                    <th>Ultimo Accesso</th>
+                                    <th>Status</th>
+                                    <th>Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-tbody"></tbody>
+                        </table>
+                        <div class="empty-state" id="empty-msg" style="display:none;">
+                            <div class="ei">👥</div>
+                            <p>Nessun utente trovato</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // =============================
+        // PASSWORD ADMIN
+        // =============================
+        const ADMIN_PASS = '2580';
+
+        function checkLock() {
+            const val = document.getElementById('lock-pass').value.trim();
+            if (val === ADMIN_PASS) {
+                sessionStorage.setItem('reg_admin_ok', '1');
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                // Use a safe check for loadUsers
+                if (typeof loadUsers === 'function') loadUsers();
+            } else {
+                const err = document.getElementById('lock-err');
+                if (err) {
+                    err.style.display = 'block';
+                    setTimeout(() => err.style.display = 'none', 3000);
+                } else {
+                    alert("Password errata!");
+                }
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('reg_admin_ok');
+            location.reload();
+        }
+
+        // FUNZIONE DI EMERGENZA (Se il tasto non risponde)
+        window.bypassLock = function () {
+            sessionStorage.setItem('reg_admin_ok', '1');
+            document.getElementById('lock-screen').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            loadUsers();
+        };
+
+        // Auto-login if session active
+        if (sessionStorage.getItem('reg_admin_ok') === '1') {
+            document.getElementById('lock-screen').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+        }
+
+        // =============================
+        // USERS DATA (localStorage)
+        // =============================
+        // Gli utenti si registrano tramite il modal in index.html.
+        // Vengono salvati in localStorage sotto le chiavi:
+        //   fashion_ai_global_registry  → array globale utenti
+        //   fashion_ai_user_<email>     → dati singolo utente
+
+        function getUsers() {
+            // Leggi il registro globale
+            let users = JSON.parse(localStorage.getItem('fashion_ai_global_registry') || '[]');
+
+            // Cerca anche profili singoli non ancora nel registro
+            const allKeys = Object.keys(localStorage);
+            allKeys.forEach(key => {
+                if (key.startsWith('fashion_ai_user_profile_')) {
+                    try {
+                        const profile = JSON.parse(localStorage.getItem(key));
+                        if (profile && profile.email && !users.find(u => u.email === profile.email)) {
+                            users.push({
+                                id: 'u_' + profile.email,
+                                name: profile.name || profile.email.split('@')[0],
+                                email: profile.email,
+                                date: profile.registeredAt || '—',
+                                lastLogin: profile.lastLogin || '—',
+                                verified: profile.verified !== false,
+                                blocked: profile.blocked === true
+                            });
+                        }
+                    } catch (e) { }
+                }
+            });
+
+            // Rimuovi nomi/email finti come Admin 1, Admin 2 ecc.
+            const FAKE = ['Admin 1', 'Admin 2', 'davide@admin.com', 'jacopo@style.it', 'elena.rossi@gmail.com'];
+            users = users.filter(u => !FAKE.includes(u.name) && !FAKE.includes(u.email));
+
+            return users;
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('fashion_ai_global_registry', JSON.stringify(users));
+        }
+
+        // =============================
+        // RENDER
+        // =============================
+        let allUsers = [];
+
+        function loadUsers() {
+            allUsers = getUsers();
+            updateStats();
+            renderTable();
+        }
+
+        function updateStats() {
+            document.getElementById('s-total').textContent = allUsers.length;
+            document.getElementById('s-verified').textContent = allUsers.filter(u => u.verified && !u.blocked).length;
+            document.getElementById('s-blocked').textContent = allUsers.filter(u => u.blocked).length;
+            document.getElementById('s-pending').textContent = allUsers.filter(u => !u.verified && !u.blocked).length;
+        }
+
+        function renderTable() {
+            const search = document.getElementById('search').value.toLowerCase();
+            const statusFilter = document.getElementById('filter-status').value;
+
+            let filtered = allUsers.filter(u => {
+                const matchSearch = !search ||
+                    (u.name || '').toLowerCase().includes(search) ||
+                    (u.email || '').toLowerCase().includes(search);
+                const matchStatus = !statusFilter ||
+                    (statusFilter === 'verified' && u.verified && !u.blocked) ||
+                    (statusFilter === 'blocked' && u.blocked) ||
+                    (statusFilter === 'pending' && !u.verified && !u.blocked);
+                return matchSearch && matchStatus;
+            });
+
+            const tbody = document.getElementById('user-tbody');
+            const empty = document.getElementById('empty-msg');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+
+            empty.style.display = 'none';
+            tbody.innerHTML = filtered.map(u => {
+                const initial = (u.name || u.email || '?').charAt(0).toUpperCase();
+                const statusBadge = u.blocked
+                    ? '<span class="badge badge-blocked">🔴 Bloccato</span>'
+                    : u.verified
+                        ? '<span class="badge badge-verified">✅ Verificato</span>'
+                        : '<span class="badge badge-pending">⏳ In attesa</span>';
+
+                const blockBtn = u.blocked
+                    ? `<button class="btn btn-unblock" onclick="unblockUser('${u.id}')">✅ Sblocca</button>`
+                    : `<button class="btn btn-block" onclick="blockUser('${u.id}')">🚫 Blocca</button>`;
+
+                const dateStr = u.date ? new Date(u.date).toLocaleString('it-IT') : '—';
+                const lastLoginStr = u.lastLogin ? new Date(u.lastLogin).toLocaleString('it-IT') : '—';
+
+                return `
+                <tr class="${u.blocked ? 'blocked-row' : ''}">
+                    <td>
+                        <div class="user-cell">
+                            <div class="avatar ${u.blocked ? 'blocked' : ''}">${initial}</div>
+                            <span style="font-weight:600;">${u.name || '—'}</span>
+                        </div>
+                    </td>
+                    <td style="color:var(--subtext);">${u.email}</td>
+                    <td style="color:var(--subtext); white-space:nowrap;">${dateStr}</td>
+                    <td style="color:var(--subtext); white-space:nowrap;">${lastLoginStr}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <div class="action-wrap">
+                            ${blockBtn}
+                            <button class="btn btn-delete" onclick="deleteUser('${u.id}')">🗑 Elimina</button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        // =============================
+        // ACTIONS
+        // =============================
+        window.blockUser = function (id) {
+            allUsers = allUsers.map(u => u.id === id ? { ...u, blocked: true } : u);
+            saveUsers(allUsers);
+            updateStats();
+            renderTable();
+
+            // Blocca anche il profilo individuale
+            const u = allUsers.find(x => x.id === id);
+            if (u) {
+                const key = `fashion_ai_user_profile_${u.email}`;
+                const profile = JSON.parse(localStorage.getItem(key) || '{}');
+                profile.blocked = true;
+                localStorage.setItem(key, JSON.stringify(profile));
+
+                // Se è attualmente loggato, forzalo fuori
+                if (localStorage.getItem('fashion_ai_user_email') === u.email) {
+                    localStorage.removeItem('fashion_ai_user_verified');
+                    localStorage.removeItem('fashion_ai_user_email');
+                }
+            }
+        };
+
+        window.unblockUser = function (id) {
+            allUsers = allUsers.map(u => u.id === id ? { ...u, blocked: false } : u);
+            saveUsers(allUsers);
+            const u = allUsers.find(x => x.id === id);
+            if (u) {
+                const key = `fashion_ai_user_profile_${u.email}`;
+                const profile = JSON.parse(localStorage.getItem(key) || '{}');
+                profile.blocked = false;
+                localStorage.setItem(key, JSON.stringify(profile));
+            }
+            updateStats();
+            renderTable();
+        };
+
+        window.deleteUser = function (id) {
+            if (!confirm('Eliminare definitivamente questo account? L\'operazione non è reversibile.')) return;
+            const u = allUsers.find(x => x.id === id);
+            allUsers = allUsers.filter(x => x.id !== id);
+            saveUsers(allUsers);
+
+            // Rimuovi profilo individuale
+            if (u) {
+                localStorage.removeItem(`fashion_ai_user_profile_${u.email}`);
+                if (localStorage.getItem('fashion_ai_user_email') === u.email) {
+                    localStorage.removeItem('fashion_ai_user_verified');
+                    localStorage.removeItem('fashion_ai_user_email');
+                }
+            }
+            updateStats();
+            renderTable();
+        };
+
+        // Auto-init on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('reg_admin_ok') === '1') loadUsers();
+        });
+    </script>
+
+</body>
+
+</html>

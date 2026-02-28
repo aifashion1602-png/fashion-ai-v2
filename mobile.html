@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fashion AI | Mobile Experience</title>
+    <link rel="stylesheet" href="mobile_style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Comfortaa:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- App Status Bar Placeholder -->
+    <div class="status-bar">
+        <span class="time">17:45</span>
+        <div class="icons">
+            <span>📶</span> <span>🔋</span>
+        </div>
+    </div>
+
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="logo">FASHION AI</div>
+        <div class="profile-icon">👤</div>
+    </header>
+
+    <main class="app-container">
+        <!-- Story/Snap View -->
+        <section class="stories">
+            <div class="story active"><span>Tu</span></div>
+            <div class="story"><span>Gucci</span></div>
+            <div class="story"><span>Zara</span></div>
+            <div class="story"><span>Zegna</span></div>
+            <div class="story"><span>Nike</span></div>
+        </section>
+
+        <!-- Dynamic Hero Card -->
+        <section class="hero-card">
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800"
+                    alt="Fashion">
+            </div>
+            <div class="hero-info">
+                <span class="badge">Tendenza Oggi</span>
+                <h2>Scegli il tuo stile unico con l'IA</h2>
+                <p>Lasciati guidare dalla tecnologia nel mondo del lusso.</p>
+                <button class="action-btn" onclick="scrollToChat()">Inizia Ora</button>
+            </div>
+        </section>
+
+        <!-- Quick AI Suggestions -->
+        <section class="quick-services">
+            <h3>I Tuoi Servizi</h3>
+            <div class="grid">
+                <div class="service-tile" onclick="scrollToChat()">
+                    <span class="icon">👗</span>
+                    <span>Outfit AI</span>
+                </div>
+                <label class="service-tile" for="image-upload"
+                    style="cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <span class="icon">📸</span>
+                    <span>Analisi Foto</span>
+                </label>
+                <div class="service-tile">
+                    <span class="icon">✨</span>
+                    <span>Trends</span>
+                </div>
+                <div class="service-tile">
+                    <span class="icon">🔍</span>
+                    <span>Cerca Brand</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chat Experience Section -->
+        <section id="chat-section" class="chat-section">
+            <div class="section-title">
+                <h3>Chiedi al tuo Stylist</h3>
+                <p>Basato su Fashion AI</p>
+            </div>
+
+            <!-- Custom AI Chat Interface with Image Support -->
+            <div class="chat-interface"
+                style="width: 100%; height: 500px; border-radius: 20px; overflow: hidden; background: rgba(30, 41, 59, 0.7); border: 2px solid rgba(157, 78, 221, 0.2); display: flex; flex-direction: column;">
+                <div id="chat-messages"
+                    style="flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; text-align: left;">
+                    <div class="message bot-message"
+                        style="background: rgba(157, 78, 221, 0.1); padding: 10px 15px; border-radius: 12px 12px 12px 0; color: white; border: 1px solid rgba(157, 78, 221, 0.2); font-size: 0.9rem;">
+                        Ciao! Carica una foto del tuo outfit per ricevere consigli immediati! 📸
+                    </div>
+                </div>
+
+                <div id="image-preview-container"
+                    style="display: none; padding: 8px 15px; background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.1); align-items: center; gap: 10px;">
+                    <div style="position: relative;">
+                        <img id="image-preview" src="#"
+                            style="height: 50px; border-radius: 6px; border: 1px solid #9d4edd;">
+                        <span onclick="clearSelectedImage()"
+                            style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer;">&times;</span>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #ccc;">Foto pronta</span>
+                </div>
+
+                <div class="chat-input-area"
+                    style="padding: 10px; background: rgba(0,0,0,0.3); display: flex; gap: 8px; align-items: center;">
+                    <label for="image-upload" title="Scegli da Galleria o Scatta Foto"
+                        style="background: rgba(255,255,255,0.1); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                        <span>📸</span>
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;"
+                            onchange="handleImageSelection(event)">
+                    </label>
+                    <input type="text" id="user-input" placeholder="Messaggio..." onkeypress="handleKeyPress(event)"
+                        style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 20px; color: white; outline: none; font-size: 0.9rem;">
+                    <button onclick="sendMessage()"
+                        style="background: linear-gradient(135deg, #7b2cbf, #333399); border: none; width: 40px; height: 40px; border-radius: 50%; color: white; cursor: pointer;">➔</button>
+                </div>
+            </div>
+        </section>
+
+        <div style="height: 100px;"></div> <!-- Spacer for Nav -->
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="#chat-section" class="nav-item">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Stylist</span>
+        </a>
+        <a href="#" class="nav-item">
+            <span class="nav-icon">🔥</span>
+            <span class="nav-label">Popolari</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="openLoginModal()">
+            <span class="nav-icon">👤</span>
+            <span class="nav-label">Accedi</span>
+        </a>
+    </nav>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal-overlay"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000;">
+        <div class="glass-card modal-content"
+            style="background: rgba(20, 30, 50, 0.95); max-width: 350px; padding: 30px; border-radius: 20px; position: relative; text-align: center;">
+            <span class="close-modal" onclick="closeLoginModal()"
+                style="position: absolute; top: 15px; right: 15px; font-size: 1.5rem; cursor: pointer;">&times;</span>
+            <h2 id="modal-title" style="margin-bottom: 10px;">Registrazione</h2>
+            <p id="modal-subtitle" style="font-size: 0.9rem; color: #ccc; margin-bottom: 20px;">Crea un account per le
+                tue chat!</p>
+
+            <form class="email-form" id="registration-form">
+                <input type="text" id="reg-name" placeholder="Il tuo Nome" required
+                    style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #444; background: #1a1a1a; color: white;">
+                <input type="email" id="reg-email" placeholder="Email" required
+                    style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #444; background: #1a1a1a; color: white;">
+                <button type="submit" class="action-btn" style="width: 100%;">Invia Email di Verifica</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        function scrollToChat() {
+            document.getElementById('chat-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Ensure Modal works even if script.js has issues
+        window.openLoginModal = function () {
+            document.getElementById('login-modal').style.display = 'flex';
+        }
+        window.closeLoginModal = function () {
+            document.getElementById('login-modal').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

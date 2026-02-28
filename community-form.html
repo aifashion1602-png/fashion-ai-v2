@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entra nella Community | Fashion AI</title>
+    <meta name="description"
+        content="Iscriviti alla community Fashion AI e ricevi outfit personalizzati ogni settimana in base al tuo stile.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600;700&family=Outfit:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
+    <!-- Usa supabase anon key (sicura per il frontend) -->
+    <script src="supabase-config.js"></script>
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <style>
+        /* ===================================================
+           IDENTICO AL SITO PRINCIPALE
+        =================================================== */
+        :root {
+            --bg-color: #0f0c29;
+            --primary-gradient: linear-gradient(135deg, #7b2cbf, #333399);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(123, 44, 191, 0.3);
+            --primary: #9d4edd;
+            --primary-dark: #7b2cbf;
+            --text: #ffffff;
+            --subtext: #94a3b8;
+            --font-main: 'Comfortaa', cursive;
+            --font-body: 'Outfit', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #7b2cbf, #9d4edd);
+            border-radius: 5px;
+            border: 2px solid #0f172a;
+        }
+
+        /* ── Navbar (stesso del sito) ── */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 8%;
+            background: rgba(15, 12, 41, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .brand-text {
+            font-family: var(--font-main);
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .brand-text .highlight {
+            color: #9d4edd;
+        }
+
+        .back-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: #c084fc;
+            text-decoration: none;
+            padding: 9px 20px;
+            border-radius: 20px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-btn:hover {
+            background: rgba(157, 78, 221, 0.2);
+            transform: translateX(-3px);
+        }
+
+        /* ── Background particles ── */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatOrb 8s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(123, 44, 191, 0.15);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(51, 51, 153, 0.12);
+            bottom: 100px;
+            right: -50px;
+            animation-delay: 3s;
+        }
+
+        @keyframes floatOrb {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(20px, -20px);
+            }
+        }
+
+        /* ── Page layout ── */
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 60px 24px 100px;
+        }
+
+        /* ── Header ── */
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeInUp 0.7s ease both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(123, 44, 191, 0.2);
+            border: 1px solid var(--glass-border);
+            color: #c084fc;
+            padding: 7px 20px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #ffffff, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            color: var(--subtext);
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* Benefits bar */
+        .benefits {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .benefit-item span {
+            font-size: 1rem;
+        }
+
+        /* ── Glass Card (stesso del sito) ── */
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 44px 42px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            animation: fadeInUp 0.8s 0.1s ease both;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 600px) {
+            .glass-card {
+                padding: 28px 20px;
+            }
+
+            .page-header h1 {
+                font-size: 1.9rem;
+            }
+        }
+
+        /* ── Section labels ── */
+        .section-label {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.8px;
+            color: #9d4edd;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, rgba(157, 78, 221, 0.3), transparent);
+        }
+
+        /* ── Form groups ── */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        @media (max-width: 560px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.55);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+        }
+
+        .form-group label .req {
+            color: #9d4edd;
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(123, 44, 191, 0.2);
+            border-radius: 14px;
+            padding: 13px 18px;
+            color: white;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s, background 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .form-group select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239d4edd' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 44px;
+            cursor: pointer;
+        }
+
+        .form-group select option {
+            background: #1e1535;
+            color: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.15);
+            background: rgba(157, 78, 221, 0.05);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 88px;
+            line-height: 1.5;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ── Style chips ── */
+        .chips-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .chip {
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(123, 44, 191, 0.25);
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .chip:hover {
+            border-color: var(--primary);
+            color: #c084fc;
+            background: rgba(157, 78, 221, 0.08);
+        }
+
+        .chip.selected {
+            background: rgba(157, 78, 221, 0.2);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 0 12px rgba(157, 78, 221, 0.25);
+        }
+
+        /* ── Divider ── */
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(123, 44, 191, 0.15);
+            margin: 28px 0;
+        }
+
+        /* ── Checkbox ── */
+        .consent-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 18px 20px;
+            background: rgba(123, 44, 191, 0.07);
+            border: 1px solid rgba(123, 44, 191, 0.2);
+            border-radius: 16px;
+            cursor: pointer;
+            margin-bottom: 28px;
+            transition: background 0.2s;
+        }
+
+        .consent-box:hover {
+            background: rgba(123, 44, 191, 0.12);
+        }
+
+        .consent-box input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            margin-top: 2px;
+        }
+
+        .consent-box label {
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.55;
+            cursor: pointer;
+            text-transform: none;
+            letter-spacing: 0;
+            font-weight: 400;
+        }
+
+        .consent-box label strong {
+            color: white;
+        }
+
+        .consent-box label a {
+            color: #9d4edd;
+        }
+
+        /* ── Submit button (stesso del sito) ── */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 16px 32px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 20px rgba(123, 44, 191, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 32px rgba(123, 44, 191, 0.45);
+        }
+
+        .cta-button:hover::after {
+            opacity: 1;
+        }
+
+        .cta-button:active {
+            transform: translateY(0);
+        }
+
+        .cta-button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ── Form hint ── */
+        .form-hint {
+            text-align: center;
+            margin-top: 16px;
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        /* ── Error messages ── */
+        .field-error {
+            font-family: var(--font-body);
+            color: #f87171;
+            font-size: 0.78rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error input,
+        .form-group.error select,
+        .form-group.error textarea {
+            border-color: #ef4444;
+        }
+
+        .form-group.error .field-error {
+            display: block;
+        }
+
+        .error-banner {
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            color: #fca5a5;
+            margin-bottom: 20px;
+        }
+
+        /* ── Success screen ── */
+        #success-screen {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .success-emoji {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 24px;
+            animation: bounceIn 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.25);
+            }
+
+            75% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        #success-screen h2 {
+            font-size: 2.2rem;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, #ffffff, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        #success-screen p {
+            color: var(--subtext);
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        /* Loading pulse on button */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .loading {
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background orbs -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <!-- Navbar — identica al sito -->
+    <nav class="navbar">
+        <a href="index.html" class="brand-text">FASHION <span class="highlight">AI</span></a>
+        <a href="index.html" class="back-btn">← Torna alla Home</a>
+    </nav>
+
+    <!-- Main content -->
+    <div class="page-wrapper">
+
+        <!-- Header -->
+        <div class="page-header">
+            <div class="section-badge">✨ Community Esclusiva</div>
+            <h1>Entra nella nostra community</h1>
+            <p>Ogni settimana ricevi 2 outfit personalizzati in base al tuo stile e gusti — completamente gratis.</p>
+
+            <div class="benefits">
+                <div class="benefit-item"><span>📬</span> Email settimanale</div>
+                <div class="benefit-item"><span>👗</span> Outfit su misura</div>
+                <div class="benefit-item"><span>🔒</span> Dati sicuri</div>
+                <div class="benefit-item"><span>❌</span> Disiscriviti quando vuoi</div>
+            </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="glass-card">
+            <form id="community-form" novalidate>
+
+                <!-- Errore generico -->
+                <div class="error-banner" id="error-banner"></div>
+
+                <!-- DATI PERSONALI -->
+                <div class="section-label">👤 Dati Personali</div>
+
+                <div class="form-row">
+                    <div class="form-group" id="g-nome">
+                        <label>Nome <span class="req">*</span></label>
+                        <input type="text" id="nome" placeholder="Mario" autocomplete="given-name">
+                        <div class="field-error">Campo obbligatorio</div>
+                    </div>
+                    <div class="form-group" id="g-cognome">
+                        <label>Cognome <span class="req">*</span></label>
+                        <input type="text" id="cognome" placeholder="Rossi" autocomplete="family-name">
+                        <div class="field-error">Campo obbligatorio</div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="g-email">
+                    <label>Email <span class="req">*</span></label>
+                    <input type="email" id="email" placeholder="mario.rossi@email.com" autocomplete="email">
+                    <div class="field-error">Inserisci un'email valida</div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- PREFERENZE OUTFIT -->
+                <div class="section-label">👗 Preferenze Outfit</div>
+
+                <div class="form-group" id="g-genere">
+                    <label>Genere / Target Outfit <span class="req">*</span></label>
+                    <select id="genere">
+                        <option value="" disabled selected>Seleziona...</option>
+                        <option value="uomo">Uomo</option>
+                        <option value="donna">Donna</option>
+                        <option value="unisex">Unisex</option>
+                        <option value="non_specificato">Preferisco non dirlo</option>
+                    </select>
+                    <div class="field-error">Seleziona un'opzione</div>
+                </div>
+
+                <div class="form-group" id="g-stile">
+                    <label>
+                        Stile Preferito <span class="req">*</span>
+                        <span
+                            style="color:rgba(255,255,255,0.3); font-size:0.75rem; text-transform:none; letter-spacing:0; margin-left:6px;">seleziona
+                            più stili</span>
+                    </label>
+                    <div class="chips-wrap" id="chips">
+                        <div class="chip" data-value="elegante">Elegante</div>
+                        <div class="chip" data-value="streetwear">Streetwear</div>
+                        <div class="chip" data-value="casual">Casual</div>
+                        <div class="chip" data-value="sportivo">Sportivo</div>
+                        <div class="chip" data-value="old_money">Old Money</div>
+                        <div class="chip" data-value="minimal">Minimal</div>
+                        <div class="chip" data-value="luxury">Luxury</div>
+                        <div class="chip" data-value="altro">Altro</div>
+                    </div>
+                    <input type="hidden" id="stile">
+                    <div class="field-error" id="stile-err">Seleziona almeno uno stile</div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- DETTAGLI OPZIONALI -->
+                <div class="section-label">✨ Dettagli Aggiuntivi <span
+                        style="font-weight:400; text-transform:none; letter-spacing:0; font-size:0.7rem; color:rgba(255,255,255,0.3);">(opzionali)</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Taglia</label>
+                        <select id="taglia">
+                            <option value="">Non specificata</option>
+                            <option>XS</option>
+                            <option>S</option>
+                            <option>M</option>
+                            <option>L</option>
+                            <option>XL</option>
+                            <option>XXL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Budget settimanale</label>
+                        <select id="budget">
+                            <option value="">Non specificato</option>
+                            <option value="basso">Economico (&lt; €50)</option>
+                            <option value="medio">Medio (€50–€150)</option>
+                            <option value="alto">Alto (€150–€400)</option>
+                            <option value="luxury">Luxury (&gt; €400)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Colori Preferiti</label>
+                    <input type="text" id="colori" placeholder="Es: nero, bianco, beige, navy...">
+                </div>
+
+                <div class="form-group">
+                    <label>Richiesta Specifica</label>
+                    <input type="text" id="richiesta" placeholder="Es: outfit per colloquio, look da matrimonio...">
+                </div>
+
+                <div class="form-group">
+                    <label>Descrizione Aggiuntiva</label>
+                    <textarea id="descrizione"
+                        placeholder="Raccontaci qualcosa in più sul tuo stile, occasioni, silhouette..."></textarea>
+                </div>
+
+                <hr class="divider">
+
+                <!-- CONSENSO -->
+                <div class="consent-box">
+                    <input type="checkbox" id="consenso">
+                    <label for="consenso">
+                        <strong>Accetto di ricevere email settimanali</strong> con outfit personalizzati e aggiornamenti
+                        dalla community Fashion AI.
+                        Puoi disiscriverti in qualsiasi momento cliccando il link nell'email. Consulta la <a
+                            href="#">Privacy Policy</a>.
+                    </label>
+                </div>
+                <div class="field-error" id="consent-err"
+                    style="display:none; margin-top:-20px; margin-bottom:22px; font-size:0.8rem; padding-left:4px;">
+                    Devi accettare per continuare
+                </div>
+
+                <button type="submit" class="cta-button" id="submit-btn">
+                    ✨ Iscrivimi alla community
+                </button>
+
+                <p class="form-hint">🔒 I tuoi dati sono protetti e non vengono mai venduti a terzi.</p>
+            </form>
+
+            <!-- SUCCESS -->
+            <div id="success-screen">
+                <span class="success-emoji">🎉</span>
+                <h2>Perfetto! Sei dentro!</h2>
+                <p>
+                    Riceverai i tuoi outfit personalizzati <strong style="color:white;">ogni settimana</strong>
+                    direttamente nella tua casella email.<br><br>
+                    Grazie per esserti unito alla community Fashion AI!
+                </p>
+                <a href="index.html" class="cta-button" style="max-width:300px; margin:0 auto; text-decoration:none;">
+                    🏠 Torna alla Home
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer note -->
+        <p
+            style="text-align:center; margin-top:30px; font-family:var(--font-body); font-size:0.78rem; color:rgba(255,255,255,0.2);">
+            © 2024 Fashion AI · <a href="#" style="color:#7b2cbf;">Privacy Policy</a>
+        </p>
+    </div>
+
+    <script>
+        // ========================
+        // CHIPS — multi-select stile
+        // ========================
+        let selectedStyles = [];
+
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const val = chip.dataset.value;
+                if (chip.classList.contains('selected')) {
+                    chip.classList.remove('selected');
+                    selectedStyles = selectedStyles.filter(s => s !== val);
+                } else {
+                    chip.classList.add('selected');
+                    selectedStyles.push(val);
+                }
+                document.getElementById('stile').value = selectedStyles.join(',');
+                document.getElementById('stile-err').style.display = 'none';
+            });
+        });
+
+        // ========================
+        // FORM SUBMIT
+        // ========================
+        document.getElementById('community-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            let valid = true;
+            const showErr = (id) => { document.getElementById(id).classList.add('error'); valid = false; };
+            const clearErr = (id) => { document.getElementById(id).classList.remove('error'); };
+
+            const nome = document.getElementById('nome').value.trim();
+            nome ? clearErr('g-nome') : showErr('g-nome');
+
+            const cognome = document.getElementById('cognome').value.trim();
+            cognome ? clearErr('g-cognome') : showErr('g-cognome');
+
+            const email = document.getElementById('email').value.trim();
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            emailOk ? clearErr('g-email') : showErr('g-email');
+
+            const genere = document.getElementById('genere').value;
+            genere ? clearErr('g-genere') : showErr('g-genere');
+
+            if (selectedStyles.length === 0) {
+                document.getElementById('stile-err').style.display = 'block';
+                valid = false;
+            }
+
+            const consenso = document.getElementById('consenso').checked;
+            if (!consenso) {
+                document.getElementById('consent-err').style.display = 'block';
+                valid = false;
+            } else {
+                document.getElementById('consent-err').style.display = 'none';
+            }
+
+            if (!valid) return;
+
+            // Build payload
+            const payload = {
+                nome,
+                cognome,
+                email,
+                genere,
+                stile: selectedStyles.join(','),
+                taglia: document.getElementById('taglia').value || null,
+                budget: document.getElementById('budget').value || null,
+                colori: document.getElementById('colori').value.trim() || null,
+                richiesta: document.getElementById('richiesta').value.trim() || null,
+                descrizione: document.getElementById('descrizione').value.trim() || null,
+                status: 'nuovo',
+                subscribed: true
+            };
+
+            // Loading state
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Invio in corso...';
+            btn.classList.add('loading');
+
+            const errorBanner = document.getElementById('error-banner');
+            errorBanner.style.display = 'none';
+
+            try {
+                if (supabase.isConfigured()) {
+                    // ✅ Supabase — database reale
+                    await supabase.insert('community_requests', payload);
+                } else {
+                    // ⚠️ Fallback localStorage (test locale)
+                    await new Promise(r => setTimeout(r, 800)); // Simula latenza
+                    const existing = JSON.parse(localStorage.getItem('fashion_community_requests') || '[]');
+                    if (existing.find(r => r.email === email)) {
+                        throw new Error('duplicate');
+                    }
+                    existing.push({ ...payload, id: 'req_' + Date.now(), date: new Date().toLocaleString('it-IT') });
+                    localStorage.setItem('fashion_community_requests', JSON.stringify(existing));
+                }
+
+                // ✅ Successo — mostra schermata
+                document.getElementById('community-form').style.display = 'none';
+                document.getElementById('success-screen').style.display = 'block';
+
+                // ✉️ Manda email di benvenuto con EmailJS
+                try {
+                    if (typeof emailjs !== 'undefined') {
+                        emailjs.init({ publicKey: 'Nf_t0cHNsMTErhig0' });
+                        await emailjs.send('service_iffn8ga', 'template_community_welcome', {
+                            to_email: email,
+                            to_name: nome + ' ' + cognome,
+                            stile: selectedStyles.join(', '),
+                            genere: genere,
+                            owner_email: 'aifashion1602@gmail.com'
+                        });
+                        console.log('✅ Email di benvenuto inviata!');
+                    }
+                } catch (emailErr) {
+                    // L'iscrizione è andata a buon fine anche senza email
+                    console.warn('Email di benvenuto non inviata (template non configurato):', emailErr);
+                }
+
+            } catch (err) {
+                console.error('Errore:', err);
+                const msg = (err.message && err.message.toLowerCase().includes('duplicate'))
+                    ? '⚠️ Questa email è già iscritta alla community!'
+                    : '❌ Errore durante l\'invio. Controlla la connessione e riprova.';
+
+                errorBanner.textContent = msg;
+                errorBanner.style.display = 'block';
+                errorBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                btn.disabled = false;
+                btn.textContent = '✨ Iscrivimi alla community';
+                btn.classList.remove('loading');
+            }
+        });
+
+        // Focus glow on input bar
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.addEventListener('focus', () => {
+                el.parentElement.style.transform = 'scale(1.005)';
+            });
+            el.addEventListener('blur', () => {
+                el.parentElement.style.transform = '';
+            });
+        });
+    </script>
+</body>
+
+</html>
