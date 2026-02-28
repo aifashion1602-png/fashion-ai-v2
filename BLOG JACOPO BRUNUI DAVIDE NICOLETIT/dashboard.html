@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Mie Chat | Fashion AI</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --card: rgba(255, 255, 255, 0.03);
+            --primary: #9d4edd;
+            --primary-dark: #7b2cbf;
+            --text: #ffffff;
+            --subtext: #94a3b8;
+            --gradient: linear-gradient(135deg, #9d4edd, #7b2cbf);
+            --border: rgba(255, 255, 255, 0.07);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(157, 78, 221, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(123, 44, 191, 0.1) 0%, transparent 40%);
+            min-height: 100vh;
+            padding: 0 0 80px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 8%;
+            background: rgba(11, 14, 20, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Comfortaa', cursive;
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Main */
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 50px 5%;
+        }
+
+        .page-title {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--subtext);
+            font-size: 1rem;
+            margin-bottom: 36px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 5px;
+            width: fit-content;
+        }
+
+        .tab {
+            padding: 9px 22px;
+            border-radius: 10px;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: var(--subtext);
+        }
+
+        .tab.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        /* Chat Grid */
+        .chat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 22px;
+        }
+
+        .chat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 26px;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .chat-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(157, 78, 221, 0.5);
+            background: rgba(157, 78, 221, 0.05);
+            box-shadow: 0 12px 32px rgba(157, 78, 221, 0.15);
+        }
+
+        .chat-card.archived-card {
+            opacity: 0.7;
+        }
+
+        .chat-card.archived-card:hover {
+            opacity: 1;
+        }
+
+        .chat-header-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .chat-icon {
+            width: 46px;
+            height: 46px;
+            background: var(--gradient);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .chat-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+
+        .chat-date {
+            font-size: 0.8rem;
+            color: var(--subtext);
+        }
+
+        .chat-preview {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.4);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 9px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.82rem;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-family: inherit;
+        }
+
+        .resume-btn {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .resume-btn:hover {
+            opacity: 0.88;
+            transform: scale(1.02);
+        }
+
+        .archive-btn {
+            background: rgba(245, 158, 11, 0.1);
+            color: #fbbf24;
+        }
+
+        .archive-btn:hover {
+            background: rgba(245, 158, 11, 0.2);
+        }
+
+        .restore-btn {
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+        }
+
+        .restore-btn:hover {
+            background: rgba(34, 197, 94, 0.2);
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.08);
+            color: #f87171;
+        }
+
+        .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.18);
+            color: white;
+        }
+
+        .archived-badge {
+            display: inline-block;
+            background: rgba(148, 163, 184, 0.12);
+            color: #94a3b8;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--card);
+            border-radius: 24px;
+            border: 1px dashed rgba(255, 255, 255, 0.08);
+        }
+
+        .empty-icon {
+            font-size: 3.5rem;
+            margin-bottom: 18px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--subtext);
+        }
+
+        .empty-state p {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .new-chat-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .new-chat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(157, 78, 221, 0.35);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 5%;
+            }
+
+            .page-title {
+                font-size: 1.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">FASHION <span>AI</span></a>
+        <a href="index.html" class="back-btn">← Torna alla Chat</a>
+    </header>
+
+    <main>
+        <h1 class="page-title">💬 Le Mie Chat</h1>
+        <p class="page-subtitle">Riprendi le tue conversazioni, archivia o elimina quelle vecchie.</p>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" id="tab-active" onclick="switchTab('active')">🟢 Attive</button>
+            <button class="tab" id="tab-archived" onclick="switchTab('archived')">📁 Archiviate</button>
+        </div>
+
+        <!-- Active Chats -->
+        <div id="view-active">
+            <div id="chat-container" class="chat-grid"><!-- JS --></div>
+        </div>
+
+        <!-- Archived Chats -->
+        <div id="view-archived" style="display:none;">
+            <div id="archived-container" class="chat-grid"><!-- JS --></div>
+        </div>
+    </main>
+
+    <script>
+        let currentTab = 'active';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('fashion_ai_user_verified') === 'true';
+            if (!isLoggedIn) {
+                alert('Accedi per vedere la cronologia delle chat.');
+                window.location.href = 'index.html';
+                return;
+            }
+            loadChats();
+        });
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.getElementById('view-active').style.display = tab === 'active' ? 'block' : 'none';
+            document.getElementById('view-archived').style.display = tab === 'archived' ? 'block' : 'none';
+            document.getElementById('tab-active').className = 'tab' + (tab === 'active' ? ' active' : '');
+            document.getElementById('tab-archived').className = 'tab' + (tab === 'archived' ? ' active' : '');
+            if (tab === 'archived') renderArchived();
+        }
+
+        function getChats() {
+            const userEmail = localStorage.getItem('fashion_ai_user_email') || 'guest';
+            const storageKey = `fashion_ai_chats_${userEmail}`;
+            let chats = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+            // Fallback for transition
+            if (Object.keys(chats).length === 0) {
+                const legacy = JSON.parse(localStorage.getItem('fashion_ai_chats') || '{}');
+                if (Object.keys(legacy).length > 0) {
+                    chats = legacy;
+                    localStorage.setItem(storageKey, JSON.stringify(chats));
+                }
+            }
+            return chats;
+        }
+
+        function saveChats(chats) {
+            const userEmail = localStorage.getItem('fashion_ai_user_email') || 'guest';
+            const storageKey = `fashion_ai_chats_${userEmail}`;
+            localStorage.setItem(storageKey, JSON.stringify(chats));
+            // Keep generic for safety
+            localStorage.setItem('fashion_ai_chats', JSON.stringify(chats));
+        }
+
+        function getLastMessage(chat) {
+            const msgs = chat.messages || [];
+            const last = msgs[msgs.length - 1];
+            if (!last) return 'Nessun messaggio';
+            const text = last.content?.replace(/<[^>]*>/g, '') || '';
+            return text.length > 60 ? text.substring(0, 60) + '...' : text;
+        }
+
+        function loadChats() {
+            renderActive();
+        }
+
+        function renderActive() {
+            const chats = getChats();
+            const container = document.getElementById('chat-container');
+
+            const activeIds = Object.keys(chats)
+                .filter(id => chats[id].archived !== true)
+                .sort((a, b) => b.split('_')[1] - a.split('_')[1]);
+
+            if (activeIds.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">💬</div>
+                        <h3>Nessuna chat attiva</h3>
+                        <p>Non hai ancora conversazioni salvate.<br>Inizia a parlare con Fashion AI!</p>
+                        <a href="index.html#chatbot-container" class="new-chat-btn">✨ Inizia una Chat</a>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = activeIds.map(id => {
+                const chat = chats[id];
+                const msgCount = (chat.messages || []).length;
+                const preview = getLastMessage(chat);
+                return `
+                    <div class="chat-card" onclick="resumeChat('${id}')">
+                        <div class="chat-header-row">
+                            <div class="chat-icon">💬</div>
+                            <div class="chat-meta">
+                                <div class="chat-title">${chat.title || 'Conversazione ' + id.slice(-4)}</div>
+                                <div class="chat-date">🕐 ${chat.date || 'Data sconosciuta'} &nbsp;·&nbsp; ${msgCount} messaggi</div>
+                            </div>
+                        </div>
+                        <div class="chat-preview">${preview}</div>
+                        <div class="chat-actions" onclick="event.stopPropagation()">
+                            <a href="index.html?chatId=${id}" class="action-btn resume-btn">▶ Riprendi</a>
+                            <button class="action-btn archive-btn" onclick="archiveChat('${id}')">📁 Archivia</button>
+                            <button class="action-btn delete-btn" onclick="deleteChat('${id}')">🗑</button>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function renderArchived() {
+            const chats = getChats();
+            const container = document.getElementById('archived-container');
+
+            const archivedIds = Object.keys(chats)
+                .filter(id => chats[id].archived === true)
+                .sort((a, b) => b.split('_')[1] - a.split('_')[1]);
+
+            if (archivedIds.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📁</div>
+                        <h3>Nessuna chat archiviata</h3>
+                        <p>Le chat che archivi appariranno qui.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = archivedIds.map(id => {
+                const chat = chats[id];
+                return `
+                    <div class="chat-card archived-card">
+                        <div class="chat-header-row">
+                            <div class="chat-icon" style="background:rgba(148,163,184,0.15);">📁</div>
+                            <div class="chat-meta">
+                                <div class="archived-badge">Archiviata</div>
+                                <div class="chat-title">${chat.title || 'Conversazione ' + id.slice(-4)}</div>
+                                <div class="chat-date">🕐 ${chat.date || 'Data sconosciuta'}</div>
+                            </div>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="action-btn restore-btn" onclick="restoreChat('${id}')">↩ Ripristina</button>
+                            <button class="action-btn delete-btn" onclick="deleteChat('${id}')">🗑 Elimina</button>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function resumeChat(id) {
+            window.location.href = `index.html?chatId=${id}`;
+        }
+
+        window.archiveChat = function (id) {
+            const chats = getChats();
+            if (chats[id]) {
+                chats[id].archived = true;
+                saveChats(chats);
+            }
+            renderActive();
+        };
+
+        window.restoreChat = function (id) {
+            const chats = getChats();
+            if (chats[id]) {
+                chats[id].archived = false;
+                saveChats(chats);
+            }
+            renderArchived();
+        };
+
+        window.deleteChat = function (id) {
+            if (!confirm('Eliminare definitivamente questa chat? L\'operazione non può essere annullata.')) return;
+            const chats = getChats();
+            delete chats[id];
+            saveChats(chats);
+            if (sessionStorage.getItem('fashion_ai_current_chat_id') === id) {
+                sessionStorage.removeItem('fashion_ai_current_chat_id');
+            }
+            currentTab === 'active' ? renderActive() : renderArchived();
+        };
+    </script>
+</body>
+
+</html>

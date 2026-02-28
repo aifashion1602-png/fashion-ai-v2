@@ -1,0 +1,317 @@
+/* Blog and About Us Styles */
+
+/* Blog Section */
+.blog-section {
+    padding: 100px 10%;
+    z-index: 2;
+    position: relative;
+    text-align: center;
+}
+
+.blog-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    background: -webkit-linear-gradient(45deg, #fff, #bbb);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+}
+
+.blog-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.blog-image {
+    height: 200px;
+    width: 100%;
+}
+
+.blog-content {
+    padding: 25px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-category {
+    font-size: 0.8rem;
+    color: #9d4edd;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.blog-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    line-height: 1.3;
+}
+
+.blog-card p {
+    color: #ccc;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    flex: 1;
+}
+
+.read-more {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.read-more:hover {
+    color: #ff9900;
+}
+
+/* About Us Section */
+.about-section {
+    padding: 100px 10%;
+    z-index: 2;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.about-card {
+    max-width: 900px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+}
+
+.about-text {
+    text-align: left;
+    color: #eee;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.about-text p {
+    margin-bottom: 20px;
+}
+
+.about-text strong {
+    color: #9d4edd;
+}
+
+.about-text em {
+    color: #ddd;
+    font-style: italic;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+/* Newsletter Section */
+.newsletter-section {
+    padding: 80px 10%;
+    z-index: 2;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.newsletter-card {
+    max-width: 800px;
+    background: linear-gradient(135deg, rgba(157, 78, 221, 0.1), rgba(60, 9, 108, 0.1));
+    border: 1px solid rgba(157, 78, 221, 0.2);
+    text-align: center;
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 15px;
+    margin: 25px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.newsletter-form input {
+    flex: 1;
+    min-width: 250px;
+    padding: 15px 25px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    outline: none;
+}
+
+.newsletter-form input:focus {
+    border-color: #9d4edd;
+}
+
+.spam-free {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* Pricing Section */
+.pricing-section {
+    padding: 100px 10%;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.pricing-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+.pricing-card {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.featured-plan {
+    border: 2px solid #9d4edd !important;
+    position: relative;
+    transform: scale(1.05);
+}
+
+.pricing-card .badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #9d4edd;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.price {
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.price span {
+    font-size: 1rem;
+    color: #888;
+}
+
+.pricing-card ul {
+    list-style: none;
+    text-align: left !important;
+    margin: 20px 0;
+}
+
+.pricing-card li {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.secondary-cta {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #888 !important;
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 100px 10%;
+    z-index: 2;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.contact-card {
+    max-width: 600px;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-family: inherit;
+    outline: none;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #9d4edd;
+}
+
+/* Footer Improvements */
+footer {
+    padding: 60px 10% 30px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #888;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-links {
+    margin: 20px 0;
+}
+
+.footer-links a {
+    color: #aaa;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #9d4edd;
+}
+
+.affiliate-disclosure {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    margin-top: 30px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    font-style: italic;
+    color: #666;
+}
